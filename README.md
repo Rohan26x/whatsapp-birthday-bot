@@ -196,13 +196,30 @@ pm2 startup
    pm2 startup
    ```
 
-### Option 3: Railway (~$5/month)
+### Option 3: AWS EC2 Free Tier (12 Months Free)
 
-1. Push code to GitHub
-2. Go to [railway.app](https://railway.app)
-3. Create new project → Deploy from GitHub repo
-4. Set start command: `npm start`
-5. Note: You'll need to handle QR scanning via logs
+AWS offers a free tier for 12 months that works well, but note that it **expires after 1 year**, unlike Oracle which is forever free.
+
+1. Sign up for [Amazon Web Services (AWS)](https://aws.amazon.com/free/).
+2. Launch an **EC2 Instance**:
+   - Choose **Ubuntu** as the OS.
+   - Choose **t2.micro** or **t3.micro** (these are eligible for the free tier).
+3. Connect to your instance via SSH:
+   ```bash
+   ssh -i your-key.pem ubuntu@YOUR_AWS_IP
+   ```
+4. Follow the same Node.js, Git, and PM2 setup steps as the Oracle guide (Step 4-7 above).
+
+> ⚠️ **Note on RAM:** The AWS Free Tier (t2.micro) only gives 1GB of RAM. Since `whatsapp-web.js` runs a headless browser, it can use a lot of memory. If it crashes, you may need to add a swap file to your Ubuntu instance.
+
+### Option 4: Google Cloud Platform (Always Free)
+
+GCP offers an `e2-micro` instance completely free in specific US regions (like `us-central1`, `us-east1`, `us-west1`).
+
+1. Sign up at [Google Cloud](https://cloud.google.com/free).
+2. Create a Compute Engine VM instance.
+3. Select **e2-micro** in one of the eligible US regions.
+4. Follow the same setup steps using PM2.
 
 ---
 
