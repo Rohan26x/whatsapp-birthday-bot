@@ -1,0 +1,25 @@
+{
+  "name": "whatsapp-birthday-bot",
+  "version": "1.0.0",
+  "description": "WhatsApp group bot that manages birthdays and sends automatic birthday wishes",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "node index.js",
+    "setup-template": "node scripts/createTemplate.js"
+  },
+  "keywords": [
+    "whatsapp",
+    "bot",
+    "birthday",
+    "automation"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "node-cron": "^3.0.3",
+    "qrcode-terminal": "^0.12.0",
+    "whatsapp-web.js": "^1.26.1",
+    "xlsx": "^0.18.5"
+  }
+}
