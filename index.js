@@ -40,9 +40,10 @@ try {
 
 // ─── Initialize WhatsApp Client ─────────────────────────────────────
 const client = new Client({
-  authStrategy: new LocalAuth(),
+  authStrategy: new LocalAuth({ dataPath: './data' }), // Save session in ./data for Render persistent disk
   puppeteer: {
     headless: true,
+    executablePath: process.env.PUPPETEER_EXECUTABLE_PATH || null,
     args: [
       '--no-sandbox',
       '--disable-setuid-sandbox',

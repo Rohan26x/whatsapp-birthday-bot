@@ -147,79 +147,34 @@ module.exports = {
 
 ## 🌐 Deployment (Keep Bot Running 24/7)
 
-### Option 1: Your PC with PM2
+### Deploy on Render (Recommended)
 
-```bash
-# Install PM2 globally
-npm install -g pm2
+Render is a modern cloud provider that is great for hosting Node.js apps. We use a `Dockerfile` to automatically handle all the complex browser dependencies required by the bot.
 
-# Start the bot with PM2
-pm2 start index.js --name "birthday-bot"
+**Prerequisites:**
+1. Push your project code (including the provided `Dockerfile`) to a GitHub repository.
+2. Sign up for a [Render account](https://render.com/).
 
-# Save the process list
-pm2 save
+**Step-by-step Setup:**
+1. In your Render Dashboard, click **New +** and select **Web Service**.
+2. Connect your GitHub account and select your bot's repository.
+3. Render will automatically detect the `Dockerfile`. Ensure the **Environment** is set to **Docker**.
+4. **Persistent Disk (Crucial for WhatsApp Session):**
+   - Scroll down to **Advanced** settings.
+   - Click **Add Disk**.
+   - **Name:** `bot-data` (or anything you prefer).
+   - **Mount Path:** `/app/data`
+   - *Why?* This prevents you from having to scan the QR code every time Render restarts the server.
+5. Click **Create Web Service**.
 
-# Auto-start on PC boot (Windows)
-pm2 startup
-```
+**Connecting to WhatsApp (First Run):**
+1. Once the service deploys, click on the **Logs** tab in Render.
+2. You will see a QR code generated in the logs.
+3. Open WhatsApp on your phone → Settings → Linked Devices → Link a Device.
+4. Scan the QR code shown on your computer screen.
+5. The session is now saved to the persistent disk, and the bot is online!
 
-> ⚠️ Your PC must stay **on and connected** to the internet at all times.
-
-### Option 2: Free VPS — Oracle Cloud (Recommended)
-
-1. Sign up at [cloud.oracle.com](https://cloud.oracle.com) → "Always Free" tier
-2. Create a compute instance (Ubuntu, Ampere A1 — 1 OCPU, 6GB RAM — **free forever**)
-3. SSH into the server:
-   ```bash
-   ssh ubuntu@YOUR_SERVER_IP
-   ```
-4. Install Node.js:
-   ```bash
-   curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
-   sudo apt install -y nodejs
-   ```
-5. Clone and setup:
-   ```bash
-   git clone YOUR_REPO_URL
-   cd whatsapp-birthday-bot
-   npm install
-   ```
-6. First run — scan QR:
-   ```bash
-   node index.js
-   ```
-7. After QR scan, stop and use PM2:
-   ```bash
-   npm install -g pm2
-   pm2 start index.js --name "birthday-bot"
-   pm2 save
-   pm2 startup
-   ```
-
-### Option 3: AWS EC2 Free Tier (12 Months Free)
-
-AWS offers a free tier for 12 months that works well, but note that it **expires after 1 year**, unlike Oracle which is forever free.
-
-1. Sign up for [Amazon Web Services (AWS)](https://aws.amazon.com/free/).
-2. Launch an **EC2 Instance**:
-   - Choose **Ubuntu** as the OS.
-   - Choose **t2.micro** or **t3.micro** (these are eligible for the free tier).
-3. Connect to your instance via SSH:
-   ```bash
-   ssh -i your-key.pem ubuntu@YOUR_AWS_IP
-   ```
-4. Follow the same Node.js, Git, and PM2 setup steps as the Oracle guide (Step 4-7 above).
-
-> ⚠️ **Note on RAM:** The AWS Free Tier (t2.micro) only gives 1GB of RAM. Since `whatsapp-web.js` runs a headless browser, it can use a lot of memory. If it crashes, you may need to add a swap file to your Ubuntu instance.
-
-### Option 4: Google Cloud Platform (Always Free)
-
-GCP offers an `e2-micro` instance completely free in specific US regions (like `us-central1`, `us-east1`, `us-west1`).
-
-1. Sign up at [Google Cloud](https://cloud.google.com/free).
-2. Create a Compute Engine VM instance.
-3. Select **e2-micro** in one of the eligible US regions.
-4. Follow the same setup steps using PM2.
+> ⚠️ **Note on Render Free Tier:** Render's free Web Services "sleep" after 15 minutes of inactivity. If the bot sleeps, it won't be able to run the 8:00 AM cron job. To keep it running 24/7 without sleeping, you can upgrade to a **Background Worker** or the lowest paid Web Service tier ($7/month).
 
 ---
 
