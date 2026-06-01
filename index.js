@@ -84,7 +84,7 @@ const client = new Client({
 // ─── QR Code Event ──────────────────────────────────────────────────
 client.on('qr', async (qr) => {
   console.log('');
-  console.log('📱 QR code generated! Open your bot\\'s web address to scan it.');
+  console.log("📱 QR code generated! Open your bot's web address to scan it.");
   console.log('   (e.g., http://localhost:3000 or your Render URL)');
   console.log('');
   
