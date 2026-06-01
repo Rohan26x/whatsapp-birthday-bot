@@ -14,10 +14,23 @@
 
 const { Client, LocalAuth } = require('whatsapp-web.js');
 const qrcode = require('qrcode-terminal');
+const express = require('express');
 const config = require('./config');
 const { handleMessage } = require('./handlers/commandHandler');
 const { startBirthdayChecker } = require('./handlers/birthdayChecker');
 const excelService = require('./services/excelService');
+
+// ─── Express Server (Keep-Alive Hack) ───────────────────────────────
+const app = express();
+const PORT = process.env.PORT || 3000;
+
+app.get('/', (req, res) => {
+  res.send('🤖 WhatsApp Birthday Bot is running!');
+});
+
+app.listen(PORT, () => {
+  console.log(`🌐 Web server is listening on port ${PORT}`);
+});
 
 // ─── Banner ─────────────────────────────────────────────────────────
 console.log('');

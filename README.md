@@ -174,7 +174,18 @@ Render is a modern cloud provider that is great for hosting Node.js apps. We use
 4. Scan the QR code shown on your computer screen.
 5. The session is now saved to the persistent disk, and the bot is online!
 
-> ⚠️ **Note on Render Free Tier:** Render's free Web Services "sleep" after 15 minutes of inactivity. If the bot sleeps, it won't be able to run the 8:00 AM cron job. To keep it running 24/7 without sleeping, you can upgrade to a **Background Worker** or the lowest paid Web Service tier ($7/month).
+> ⚠️ **Note on Render Free Tier:** Render's free Web Services "sleep" after 15 minutes of inactivity. If the bot sleeps, it won't run the 8:00 AM cron job. 
+> 
+> **How to keep it awake 24/7 for free:**
+> 1. Note the web address Render gives your app (e.g., `https://your-bot-name.onrender.com`).
+> 2. Go to [UptimeRobot](https://uptimerobot.com/) and create a free account.
+> 3. Click **Add New Monitor**.
+> 4. **Monitor Type:** HTTP(s)
+> 5. **Friendly Name:** Birthday Bot
+> 6. **URL:** Paste your Render web address.
+> 7. **Monitoring Interval:** 5 minutes.
+> 
+> UptimeRobot will ping your bot every 5 minutes, tricking Render into keeping it awake 24/7!
 
 ---
 
