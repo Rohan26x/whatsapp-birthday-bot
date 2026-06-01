@@ -44,11 +44,12 @@ npm start
 
 ### Step 3: Scan the QR Code
 
-1. A QR code will appear in your terminal
-2. Open **WhatsApp** on your phone
-3. Go to **Settings → Linked Devices → Link a Device**
-4. Scan the QR code
-5. The bot will print: `🟢 Bot is READY and connected to WhatsApp!`
+1. Start the bot (`npm start`).
+2. The bot runs a local web server. Open your browser and go to **http://localhost:3000**
+3. You will see a large QR code on the web page.
+4. Open **WhatsApp** on your phone → **Settings → Linked Devices → Link a Device**.
+5. Scan the QR code from your browser.
+6. The terminal will print: `🟢 Bot is READY and connected to WhatsApp!`
 
 ### Step 4: Find Your Group ID
 
@@ -168,11 +169,11 @@ Render is a modern cloud provider that is great for hosting Node.js apps. We use
 5. Click **Create Web Service**.
 
 **Connecting to WhatsApp (First Run):**
-1. Once the service deploys, click on the **Logs** tab in Render.
-2. You will see a QR code generated in the logs.
+1. Once the service deploys in Render, click the link to your **Render Web Address** (e.g., `https://your-bot-name.onrender.com`) at the top of the dashboard.
+2. Wait a few seconds for the page to load; you will see a large QR code on the screen.
 3. Open WhatsApp on your phone → Settings → Linked Devices → Link a Device.
 4. Scan the QR code shown on your computer screen.
-5. The session is now saved to the persistent disk, and the bot is online!
+5. Refresh the page — it will now say **"Bot is running and connected!"**. The session is securely saved to your persistent disk.
 
 > ⚠️ **Note on Render Free Tier:** Render's free Web Services "sleep" after 15 minutes of inactivity. If the bot sleeps, it won't run the 8:00 AM cron job. 
 > 

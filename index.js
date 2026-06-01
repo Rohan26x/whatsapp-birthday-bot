@@ -20,12 +20,25 @@ const { handleMessage } = require('./handlers/commandHandler');
 const { startBirthdayChecker } = require('./handlers/birthdayChecker');
 const excelService = require('./services/excelService');
 
-// ─── Express Server (Keep-Alive Hack) ───────────────────────────────
+// ─── Express Server (Keep-Alive & QR Display) ───────────────────────
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+let qrDataURL = null;
+let isAuthenticated = false;
+
 app.get('/', (req, res) => {
-  res.send('🤖 WhatsApp Birthday Bot is running!');
+  if (isAuthenticated) {
+    res.send('<h3>🤖 WhatsApp Birthday Bot is running and connected!</h3><p>UptimeRobot can safely ping this page.</p>');
+  } else if (qrDataURL) {
+    res.send(`
+      <h3>📱 Scan this QR Code with WhatsApp</h3>
+      <img src="${qrDataURL}" alt="WhatsApp QR Code" style="width:300px;height:300px;border:1px solid #ccc;padding:10px;border-radius:10px;"/>
+      <p>Once scanned, the bot will log in and this page will update on refresh.</p>
+    `);
+  } else {
+    res.send('<h3>⏳ Starting bot and generating QR Code...</h3><p>Please refresh this page in a few seconds.</p>');
+  }
 });
 
 app.listen(PORT, () => {
@@ -69,23 +82,34 @@ const client = new Client({
 });
 
 // ─── QR Code Event ──────────────────────────────────────────────────
-client.on('qr', (qr) => {
+client.on('qr', async (qr) => {
   console.log('');
-  console.log('📱 Scan this QR code with WhatsApp:');
-  console.log('   WhatsApp → Settings → Linked Devices → Link a Device');
+  console.log('📱 QR code generated! Open your bot\\'s web address to scan it.');
+  console.log('   (e.g., http://localhost:3000 or your Render URL)');
   console.log('');
+  
+  try {
+    const qrcodeLib = require('qrcode');
+    qrDataURL = await qrcodeLib.toDataURL(qr);
+  } catch (err) {
+    console.error('Failed to generate QR image:', err);
+  }
+  
+  // Also print to terminal as a backup
   qrcode.generate(qr, { small: true });
-  console.log('');
 });
 
 // ─── Authentication Events ──────────────────────────────────────────
 client.on('authenticated', () => {
   console.log('✅ Authentication successful!');
+  isAuthenticated = true;
+  qrDataURL = null;
 });
 
 client.on('auth_failure', (msg) => {
   console.error('❌ Authentication failed:', msg);
-  console.error('   Try deleting the .wwebjs_auth folder and restart.');
+  console.error('   Try deleting the ./data folder and restart.');
+  isAuthenticated = false;
 });
 
 // ─── Ready Event ────────────────────────────────────────────────────
@@ -150,6 +174,7 @@ client.on('disconnected', (reason) => {
   console.log('🔴 Bot disconnected:', reason);
   console.log('   Attempting to reconnect...');
   console.log('');
+  isAuthenticated = false;
   client.initialize();
 });
 
